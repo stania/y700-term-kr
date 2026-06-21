@@ -137,13 +137,9 @@ curl -fsSL https://claude.ai/install.sh | bash
 
 ### 인증
 
-설치 후 `claude`를 실행하면 브라우저 인증 안내가 나옵니다. proot 환경처럼 브라우저를 열기 어려운 경우 [console.anthropic.com](https://console.anthropic.com)에서 API 키를 발급한 뒤 환경변수로 지정합니다.
+설치 후 `claude`를 실행하면 브라우저 인증 안내가 나옵니다.
 
 ```bash
-# ~/.zshrc 에 추가
-export ANTHROPIC_API_KEY="sk-ant-api03-..."
-
-# 동작 확인
 claude --version
 ```
 
