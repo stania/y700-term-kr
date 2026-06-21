@@ -1,12 +1,9 @@
 #!/bin/sh
 # tmux copy-pipe helper: routes to the right clipboard tool per OS/display
-# X11 환경에서는 Android 클립보드에도 동기화 (Termux:API 앱 필요)
 if [ -n "$WAYLAND_DISPLAY" ]; then
     wl-copy
 elif [ -n "$DISPLAY" ]; then
-    _buf=$(cat)
-    printf '%s' "$_buf" | xclip -selection clipboard
-    printf '%s' "$_buf" | termux-clipboard-set 2>/dev/null &
+    xclip -selection clipboard
 elif command -v clip.exe > /dev/null 2>&1; then
     clip.exe
 else

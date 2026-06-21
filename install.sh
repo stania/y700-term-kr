@@ -37,7 +37,7 @@ link "$REPO_DIR/dotfiles/.tmux.conf" "$HOME/.tmux.conf"
 # --- bin helpers ---
 mkdir -p "$HOME/.local/bin"
 ln -sf "$REPO_DIR/bin/tmux-clipboard" "$HOME/.local/bin/tmux-clipboard"
-ln -sf "$REPO_DIR/bin/xdg-open"       "$HOME/.local/bin/xdg-open"
+ln -sf "$REPO_DIR/bin/xdg-open"      "$HOME/.local/bin/xdg-open"
 
 # --- oh-my-posh (반드시 PIE: Termux 네이티브 linker는 non-PIE(EXEC) 거부) ---
 if command -v oh-my-posh >/dev/null 2>&1; then
