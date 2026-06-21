@@ -62,7 +62,9 @@ WezTerm 폰트 폴백 체인:
 `proot-distro login ubuntu`로 Ubuntu 환경을 사용합니다.
 dotfiles는 이 저장소(`y700-term-kr`)를 clone한 뒤 `./install.sh`로 적용합니다.
 
-> ⚠️ oh-my-posh, fzf 등 바이너리는 반드시 **aarch64** 빌드를 사용해야 합니다. `install.sh`가 자동으로 다운로드합니다.
+> ⚠️ oh-my-posh, fzf 등 바이너리는 반드시 **aarch64** 빌드를 사용해야 합니다.
+> Termux 네이티브에서는 linker가 non-PIE(EXEC) 바이너리를 거부하므로, `install.sh`가
+> `pkg`로 네이티브 PIE 패키지를 설치하고 proot/glibc에서는 aarch64 릴리스를 내려받습니다.
 
 ## 단축키
 

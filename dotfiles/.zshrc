@@ -4,20 +4,25 @@ export SAVEHIST=10000
 export HISTFILE=~/.zhistory
 setopt INC_APPEND_HISTORY HIST_IGNORE_DUPS EXTENDED_HISTORY
 
-# Locale
-export LANG='ko_KR.UTF-8'
+# Locale (ko_KR 로케일이 없는 환경은 C.UTF-8로 폴백 — Termux bionic 등)
+if locale -a 2>/dev/null | grep -qiE 'ko_KR\.(utf-?8)'; then
+  export LANG='ko_KR.UTF-8'
+  export LC_CTYPE='ko_KR.UTF-8'
+else
+  export LANG='C.UTF-8'
+  export LC_CTYPE='C.UTF-8'
+fi
 export LC_MESSAGES='C'
-export LC_CTYPE='ko_KR.UTF-8'
 umask 0022
 
 # Terminal
 export TERM=xterm-256color
 unsetopt PROMPT_SP
 
-# XDG runtime dir
+# XDG runtime dir (Termux 등 /tmp 쓰기 불가 환경은 $TMPDIR 사용)
 if [[ -z "$XDG_RUNTIME_DIR" ]]; then
-  export XDG_RUNTIME_DIR=/tmp/$USER-runtime
-  [[ ! -d "$XDG_RUNTIME_DIR" ]] && mkdir -m 0700 "$XDG_RUNTIME_DIR"
+  export XDG_RUNTIME_DIR="${TMPDIR:-/tmp}/$USER-runtime"
+  [[ -d "$XDG_RUNTIME_DIR" ]] || mkdir -m 0700 -p "$XDG_RUNTIME_DIR" 2>/dev/null
 fi
 
 # Colors / dircolors
@@ -124,5 +129,15 @@ fi
 
 # fzf shell integration
 if command -v fzf &>/dev/null; then
+  # 기본 탐색 소스: fd 가 있으면 .gitignore 존중 + 잡파일 제외, 없으면 find 폴백
+  if command -v fd &>/dev/null; then
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+  else
+    export FZF_DEFAULT_COMMAND='find . \( -name .git -o -name node_modules -o -name .cache \) -prune -o -type f -print 2>/dev/null'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  fi
+  export FZF_DEFAULT_OPTS='--height 40% --reverse'
   eval "$(fzf --zsh)"
 fi

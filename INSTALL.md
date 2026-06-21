@@ -60,7 +60,9 @@ cd ~/y700-term-kr
 ./install.sh
 ```
 
-`install.sh`는 `.zshrc`, `.tmux.conf`를 symlink하고, oh-my-posh / fzf / tpm을 설치합니다.
+`install.sh`는 멱등(idempotent)합니다 — 여러 번 실행해도 동일한 환경을 만듭니다.
+`.zshrc`·`.tmux.conf` symlink(기존 실파일은 `.bak`으로 백업), oh-my-posh / fzf / fd / tpm 설치,
+기본 셸 zsh 전환(Termux)을 수행합니다. Termux에서는 PIE 문제를 피하려 `pkg`로 설치합니다.
 
 ## 5단계: proot Ubuntu
 
@@ -75,7 +77,7 @@ git clone https://github.com/stania/y700-term-kr ~/y700-term-kr
 cd ~/y700-term-kr && ./install.sh
 ```
 
-`install.sh`가 `.zshrc`, `.tmux.conf` symlink, oh-my-posh(aarch64), fzf, tpm을 자동 설치합니다.
+proot/glibc 환경에서는 `install.sh`가 oh-my-posh aarch64 릴리스를 `~/.local/bin`에 내려받습니다.
 
 ## 6단계: X11 시작
 
@@ -101,12 +103,15 @@ echo $QT_IM_MODULE    # fcitx
 echo $XMODIFIERS      # @im=fcitx
 ```
 
-### proot에서 프롬프트 안 바뀜
-`dotfiles/common/bin/oh-my-posh`가 aarch64 바이너리인지 확인:
+### 프롬프트 안 바뀜 / `has unexpected e_type: 2` 오류
+oh-my-posh·fzf가 설치됐고 **PIE(DYN)** 인지 확인합니다. Termux 네이티브 linker는
+non-PIE(EXEC) 바이너리를 거부합니다.
 ```bash
-file ~/dotfiles/common/bin/oh-my-posh
-# ELF 64-bit LSB executable, ARM aarch64 이어야 함
+command -v oh-my-posh fzf
+readelf -h "$(command -v oh-my-posh)" | grep Type   # Type: DYN 이어야 함
 ```
+`Type: EXEC`(non-PIE)면 Termux에서는 `pkg install oh-my-posh fzf`로 네이티브 PIE 버전을
+설치하세요. (PATH에 옛 EXEC 바이너리 경로가 앞서 있지 않은지도 확인)
 
 ### HiDPI - WezTerm 글자가 작음
 `config.dpi`는 X11에서 무시됩니다 (xcb가 물리 화면 크기를 0mm로 읽음).
