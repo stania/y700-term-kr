@@ -58,9 +58,9 @@ WezTerm 폰트 폴백 체인:
 
 ### proot Ubuntu
 `proot-distro login ubuntu`로 Ubuntu 환경을 사용합니다.
-dotfiles는 `~/dotfiles`에서 심볼릭 링크로 관리합니다.
+dotfiles는 이 저장소(`y700-term-kr`)를 clone한 뒤 `./install.sh`로 적용합니다.
 
-> ⚠️ oh-my-posh, fzf 등 dotfiles/common/bin의 바이너리는 반드시 **aarch64** 빌드를 사용해야 합니다. x86-64 바이너리는 실행되지 않습니다.
+> ⚠️ oh-my-posh, fzf 등 바이너리는 반드시 **aarch64** 빌드를 사용해야 합니다. `install.sh`가 자동으로 다운로드합니다.
 
 ## 단축키
 

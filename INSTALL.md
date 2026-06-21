@@ -70,24 +70,12 @@ proot-distro install ubuntu
 proot-distro login ubuntu
 
 # Ubuntu 안에서:
-apt update && apt install zsh mosh
-# dotfiles 세팅 (개인 저장소)
-git clone <your-dotfiles-repo> ~/dotfiles
-~/dotfiles/init_scripts/ubuntu.sh
+apt update && apt install zsh mosh git curl
+git clone https://github.com/stania/y700-term-kr ~/y700-term-kr
+cd ~/y700-term-kr && ./install.sh
 ```
 
-> ⚠️ `dotfiles/common/bin/` 안의 바이너리(oh-my-posh, fzf 등)를 aarch64 버전으로 교체해야 합니다.
->
-> ```bash
-> # oh-my-posh aarch64
-> curl -L -o ~/dotfiles/common/bin/oh-my-posh \
->   https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-arm64
-> chmod +x ~/dotfiles/common/bin/oh-my-posh
->
-> # fzf aarch64
-> curl -L https://github.com/junegunn/fzf/releases/latest/download/fzf-linux_arm64.tar.gz \
->   | tar xz -C ~/dotfiles/common/bin/
-> ```
+`install.sh`가 `.zshrc`, `.tmux.conf` symlink, oh-my-posh(aarch64), fzf, tpm을 자동 설치합니다.
 
 ## 6단계: X11 시작
 
