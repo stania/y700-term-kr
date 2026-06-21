@@ -100,13 +100,16 @@ if [ "$IS_TERMUX" -eq 1 ]; then
   mkdir -p "$HOME/.termux"
   link "$REPO_DIR/dotfiles/.config/termux/termux.properties" "$HOME/.termux/termux.properties"
 
-  # sshd 서비스 자동 시작 (termux-services)
-  if command -v sv-enable >/dev/null 2>&1; then
-    log "sshd 서비스 활성화"
-    sv-enable sshd
-    sv start sshd 2>/dev/null || true
+  # sshd 서비스 활성화 (termux-services runit)
+  # sv start 는 runsvdir 데몬이 필요하므로 호출하지 않음 — Termux 재시작 시 자동 기동
+  SSHD_SV="${PREFIX:-/data/data/com.termux/files/usr}/etc/sv/sshd"
+  SSHD_RUN="${PREFIX:-/data/data/com.termux/files/usr}/var/service/sshd"
+  if [ -d "$SSHD_SV" ]; then
+    log "sshd 서비스 활성화 (Termux 재시작 시 자동 시작)"
+    mkdir -p "$(dirname "$SSHD_RUN")"
+    ln -sf "$SSHD_SV" "$SSHD_RUN"
   else
-    warn "termux-services 미설치 — sshd 수동 시작 필요: sshd"
+    warn "sshd sv 스크립트 없음 — openssh 설치 확인 후 수동으로: sv-enable sshd"
   fi
 fi
 
