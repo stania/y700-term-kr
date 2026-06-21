@@ -41,6 +41,13 @@ ln -sf "$REPO_DIR/bin/xdg-open"      "$HOME/.local/bin/xdg-open"
 
 # --- Termux native 전용 ---
 if [ "$IS_TERMUX" -eq 1 ]; then
+  # X11 패키지 (termux-x11 명령어 제공)
+  if ! command -v termux-x11 >/dev/null 2>&1; then
+    log "termux-x11-nightly 설치"
+    pkg install -y x11-repo
+    pkg install -y termux-x11-nightly
+  fi
+
   link "$REPO_DIR/start-x11.sh" "$HOME/start-x11.sh"
 
   link "$REPO_DIR/dotfiles/.Xresources" "$HOME/.Xresources"
