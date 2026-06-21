@@ -22,7 +22,7 @@ cd ~/y700-term-kr
 ## 사전 준비
 
 1. [Termux](https://play.google.com/store/apps/details?id=com.termux) 설치 (Play Store)
-2. [Termux:X11](https://play.google.com/store/apps/details?id=com.termux.x11) 설치 (Play Store)
+2. [Termux:X11](https://github.com/termux/termux-x11/releases/tag/nightly) 설치 (GitHub nightly APK — Play Store 미지원)
 
 ## 1단계: Termux 기본 패키지
 
