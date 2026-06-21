@@ -87,6 +87,77 @@ proot/glibc 환경에서는 `install.sh`가 oh-my-posh aarch64 릴리스를 `~/.
 
 Termux:X11 앱이 자동으로 포그라운드로 전환되고 i3가 실행됩니다.
 
+## 7단계: Claude Code (proot 전용)
+
+Claude Code는 glibc 환경이 필요하므로 **proot Ubuntu 안에서만** 설치·실행합니다.
+Termux 네이티브(Android Bionic)에서는 Node.js 네이티브 모듈 빌드가 실패합니다.
+
+```bash
+# proot-distro login ubuntu 안에서
+apt install -y nodejs npm
+npm install -g @anthropic-ai/claude-code
+```
+
+### API 키 인증
+
+[console.anthropic.com](https://console.anthropic.com)에서 API 키를 발급합니다.
+
+```bash
+# proot 안에서
+mkdir -p ~/.config/anthropic
+echo "sk-ant-api03-..." > ~/.config/anthropic/api_key
+chmod 600 ~/.config/anthropic/api_key
+
+# 세션마다 자동 로드 (아래를 ~/.zshrc 에 추가)
+export ANTHROPIC_API_KEY="$(cat ~/.config/anthropic/api_key)"
+
+# 동작 확인
+claude --version
+```
+
+### Termux 네이티브 sshd 설정 (Termux 제어용)
+
+proot 안의 Claude Code에서 `pkg`·`termux-api` 같은 Termux 명령을 실행하려면
+Termux 네이티브에 sshd를 띄우고 SSH로 우회 진입합니다.
+
+**① Termux 네이티브에서 (proot 밖):**
+
+```bash
+pkg install openssh
+
+# 공개키 인증 활성화 — proot 에서 생성한 공개키를 등록
+cat /proc/1/root/data/data/com.termux/files/home/.ssh/id_ed25519_termux.pub \
+  >> ~/.ssh/authorized_keys   # 경로는 환경에 따라 조정
+
+sshd   # 8022 포트로 시작; 재부팅 후엔 수동으로 다시 실행
+```
+
+**② proot 안에서:**
+
+```bash
+# 전용 SSH 키 생성 (한 번만)
+ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_termux -N "" -C "proot@termux"
+
+# SSH config 등록
+cat >> ~/.ssh/config << 'EOF'
+Host termux-native
+  HostName 127.0.0.1
+  Port 8022
+  IdentityFile ~/.ssh/id_ed25519_termux
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+EOF
+chmod 600 ~/.ssh/config
+
+# 연결 테스트
+ssh termux-native 'echo OK'
+
+# 편의 alias (~/.zshrc 에 추가)
+alias tssh='ssh termux-native'
+```
+
+이후 Claude Code가 `ssh termux-native pkg install ...` 형태로 Termux를 조작할 수 있습니다.
+
 ## 트러블슈팅
 
 ### WezTerm 폰트 아틀라스 깨짐

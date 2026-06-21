@@ -1,0 +1,7 @@
+#!/bin/sh
+# proot 안에서 Android 네이티브 브라우저/앱으로 URI 열기
+# WezTerm Ctrl+Click, tmux-open 등이 이 스크립트를 호출
+exec /data/data/com.termux/files/usr/bin/am start \
+    -a android.intent.action.VIEW \
+    -d "$1" \
+    --user 0 2>/dev/null

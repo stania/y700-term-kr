@@ -87,11 +87,8 @@ zstyle ':completion:*' matcher-list \
   'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[._-]=** r:|=**' 'l:|=* r:|=*'
 zstyle ':completion:*' menu select=1
 autoload -Uz compinit
-if [[ -n $(print ~/.zcompdump(Nmh+24)) ]]; then
-  compinit
-else
-  compinit -C
-fi
+compinit -C
+# 완성 목록 갱신이 필요할 때: rm ~/.zcompdump && exec zsh
 
 # Aliases
 alias rm='rm -i'
