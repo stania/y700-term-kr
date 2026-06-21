@@ -67,12 +67,25 @@ Claude Code는 proot Ubuntu 안에서만 실행됩니다. Termux 자체(`pkg`, `
 
 설정 방법은 [INSTALL.md](INSTALL.md) 참고.
 
+### Termux 앱 설정
+
+설정 경로: 사이드 드로어 (좌측 스와이프) → **Settings** → **Keyboard**
+
+| 설정 | 경로 | 값 | 이유 |
+|------|------|----|------|
+| 가상 키보드 추가 행 표시 | Show additional keyboard | ON | Ctrl·Alt·Colon 등 보조 키 표시 |
+| 키 바 영역 확보 | Extra key bar preferences → Adjust display height for extra keys bar | ON | 키 바가 화면과 겹치지 않도록 디스플레이 높이 조정 |
+| 특수 키 자동 해제 | Extra key bar preferences → Deactivate special keys on additional key bar after each keypress | ON | Ctrl·Alt·Shift 한 번 누른 뒤 자동 해제 (원샷 모드) |
+| 키 배열 설정 | Extra key bar preferences → Extra keys config | `~/.termux/termux.properties` | `install.sh` 적용 시 자동 배포 |
+
 ### Termux:X11 앱 설정
 
-| 설정 | 값 | 이유 |
-|------|----|------|
-| Pointer → Pointer mode | Simulated touchscreen | 두 손가락 스크롤 활성화 |
-| Enable char based input | ON | fcitx5 한국어 입력 정상 동작 |
+설정 경로: 앱 실행 후 상단 우측 메뉴 → **Preferences**
+
+| 설정 | 경로 | 값 | 이유 |
+|------|------|----|------|
+| 포인터 모드 | Pointer → Pointer mode | Simulated touchscreen | 두 손가락 스크롤 활성화 |
+| 문자 기반 입력 | Enable char based input | ON | fcitx5 한국어 입력 정상 동작 |
 
 ### URL 클릭 → Android 브라우저
 
