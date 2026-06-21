@@ -43,6 +43,12 @@ pkg install \
   git openssh
 ```
 
+turnip ICD가 정상 로드됐는지 확인:
+
+```bash
+vulkaninfo --summary 2>/dev/null | grep -E 'GPU|deviceType'
+# 결과: Turnip Adreno (TM) 730 / PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU
+```
 
 ## 2단계: 폰트 설치
 
@@ -66,24 +72,7 @@ fc-cache -fv
 
 > `PlemolKR35Console.zip`은 한글 3:영문 5 비율 변형입니다. 반각 기준 폰트폴백 구성에는 기본 `PlemolKRConsole.zip`을 사용합니다.
 
-## 3단계: GPU 가속 (turnip)
-
-Termux에 `mesa-vulkan-icd-freedreno`가 설치되면 자동으로 ICD 파일이 생성됩니다.
-
-```bash
-# 설치 확인
-vulkaninfo --summary 2>/dev/null | grep -E 'GPU|deviceType'
-# 결과: Turnip Adreno (TM) 730 / PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU
-```
-
-WezTerm 실행 시 환경변수로 turnip ICD를 지정합니다:
-
-```bash
-VK_ICD_FILENAMES=/data/data/com.termux/files/usr/share/vulkan/icd.d/freedreno_icd.aarch64.json \
-  wezterm start --always-new-process
-```
-
-## 4단계: 설정 파일 배포
+## 3단계: 설정 파일 배포
 
 ```bash
 git clone https://github.com/stania/y700-term-kr ~/y700-term-kr
@@ -100,7 +89,7 @@ cd ~/y700-term-kr
 | fd | [sharkdp/fd](https://github.com/sharkdp/fd) | fzf 탐색 소스 |
 | tpm | [tmux-plugins/tpm](https://github.com/tmux-plugins/tpm) | tmux 플러그인 매니저 |
 
-## 5단계: proot Ubuntu
+## 4단계: proot Ubuntu
 
 ```bash
 pkg install proot-distro
@@ -115,7 +104,7 @@ cd ~/y700-term-kr && ./install.sh
 
 proot/glibc 환경에서는 `install.sh`가 oh-my-posh aarch64 릴리스를 `~/.local/bin`에 내려받습니다.
 
-## 6단계: X11 시작
+## 5단계: X11 시작
 
 ```bash
 ~/start-x11.sh
@@ -123,7 +112,7 @@ proot/glibc 환경에서는 `install.sh`가 oh-my-posh aarch64 릴리스를 `~/.
 
 Termux:X11 앱이 자동으로 포그라운드로 전환되고 i3가 실행됩니다.
 
-## 7단계: Claude Code (proot 전용)
+## 6단계: Claude Code (proot 전용)
 
 Claude Code는 glibc 환경이 필요하므로 **proot Ubuntu 안에서만** 설치·실행합니다.
 Termux 네이티브(Android Bionic)에서는 네이티브 바이너리 모듈이 동작하지 않습니다.
