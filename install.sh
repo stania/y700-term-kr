@@ -38,8 +38,12 @@ link() {
 # Termux 네이티브
 # =============================================================================
 if [ "$IS_TERMUX" -eq 1 ]; then
+  log "pkg upgrade"
+  pkg upgrade -y
+
   log "Termux 패키지 설치 (이미 설치된 항목은 건너뜀)"
   pkg install -y x11-repo
+  pkg update   # x11-repo 추가 후 패키지 목록 갱신
   pkg install -y \
     termux-x11-nightly \
     i3 \
@@ -49,17 +53,25 @@ if [ "$IS_TERMUX" -eq 1 ]; then
     fcitx5 \
     mesa mesa-vulkan-icd-freedreno \
     fontconfig \
-    xrdb xrandr xclip \
+    xclip \
     dmenu \
     openssh \
-    noto-fonts-cjk \
     jq \
     termux-api \
+    termux-services \
     zsh \
     oh-my-posh \
     fzf \
     fd \
     vulkan-tools
+  # xrdb / xrandr: x11-repo 패키지명이 기기마다 다를 수 있음
+  pkg install -y xrdb xrandr 2>/dev/null || \
+    pkg install -y xorg-xrdb xorg-xrandr 2>/dev/null || \
+    warn "xrdb/xrandr 설치 실패 — DPI 설정이 적용되지 않을 수 있음"
+  # 폰트: Termux 패키지명 불일치 가능
+  pkg install -y noto-fonts-cjk 2>/dev/null || \
+    pkg install -y fonts-noto-cjk 2>/dev/null || \
+    warn "noto-fonts-cjk 설치 실패 — 폰트를 수동으로 설치하세요"
 
   log "dotfile symlink (Termux)"
   link "$REPO_DIR/start-x11.sh"          "$HOME/start-x11.sh"
@@ -84,6 +96,18 @@ if [ "$IS_TERMUX" -eq 1 ]; then
 
   mkdir -p "$HOME/.config/fcitx5"
   link "$REPO_DIR/dotfiles/.config/fcitx5/profile" "$HOME/.config/fcitx5/profile"
+
+  mkdir -p "$HOME/.termux"
+  link "$REPO_DIR/dotfiles/.config/termux/termux.properties" "$HOME/.termux/termux.properties"
+
+  # sshd 서비스 자동 시작 (termux-services)
+  if command -v sv-enable >/dev/null 2>&1; then
+    log "sshd 서비스 활성화"
+    sv-enable sshd
+    sv start sshd 2>/dev/null || true
+  else
+    warn "termux-services 미설치 — sshd 수동 시작 필요: sshd"
+  fi
 fi
 
 # =============================================================================

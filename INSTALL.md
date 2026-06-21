@@ -26,6 +26,17 @@ Termux에서는 `pkg install git` 한 번만 수동으로 실행한 뒤 `./insta
 1. [Termux](https://play.google.com/store/apps/details?id=com.termux) 설치 (Play Store)
 2. [Termux:X11](https://github.com/termux/termux-x11/releases/tag/nightly) 설치 (GitHub nightly APK — Play Store 미지원)
 
+### Termux 가상 키보드 설정
+
+Termux 설정 → **Extra keys rows** 또는 `~/.termux/termux.properties`에 아래 내용을 붙여넣고 `termux-reload-settings` 실행:
+
+```
+extra-keys = [['ESC', 'TAB', 'CTRL', 'ALT', 'COLON', 'UP', 'BKSP'], \
+              ['CTRL', 'SHIFT', 'ALT', 'LEFT', 'DOWN', 'RIGHT', 'ENTER']]
+```
+
+`install.sh` 적용 시 자동으로 배포됩니다.
+
 ## 1단계: 설정 파일 배포 (Termux)
 
 ```bash
@@ -34,10 +45,14 @@ git clone https://github.com/stania/y700-term-kr ~/y700-term-kr
 ~/y700-term-kr/install.sh
 ```
 
-`install.sh`가 X11 환경에 필요한 모든 패키지를 설치합니다:
-termux-x11-nightly, i3, wezterm, rofi, dunst, fcitx5, mesa, mesa-vulkan-icd-freedreno,
-fontconfig, xrdb, xrandr, xclip, dmenu, openssh, noto-fonts-cjk, jq, termux-api,
-zsh, oh-my-posh, fzf, fd, vulkan-tools
+`install.sh`가 수행하는 작업:
+- `pkg upgrade` 후 X11 환경에 필요한 모든 패키지 설치
+- dotfile symlink, sshd 서비스 자동 활성화 (`sv-enable sshd`)
+- zsh 설치 및 기본 셸 변경
+
+주요 설치 패키지: termux-x11-nightly, i3, wezterm, rofi, dunst, fcitx5, mesa,
+mesa-vulkan-icd-freedreno, fontconfig, xrdb, xrandr, xclip, dmenu, openssh,
+noto-fonts-cjk, jq, termux-api, termux-services, zsh, oh-my-posh, fzf, fd, vulkan-tools
 
 설치 후 turnip ICD가 정상 로드됐는지 확인:
 
