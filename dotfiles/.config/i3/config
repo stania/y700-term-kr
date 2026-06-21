@@ -9,7 +9,7 @@ assign [class="org.wezfurlong.wezterm"] 1
 # 시작 시 앱 실행
 exec --no-startup-id setxkbmap -option ctrl:nocaps
 exec --no-startup-id env DISPLAY=:0 ~/.config/i3/xclip-sync.sh
-exec --no-startup-id env GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx VK_ICD_FILENAMES=/data/data/com.termux/files/usr/share/vulkan/icd.d/freedreno_icd.aarch64.json wezterm start --always-new-process
+exec --no-startup-id env GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx wezterm-launch start --always-new-process
 
 # 단축키 (Alt+Ctrl+키)
 bindsym $mod+Ctrl+i exec env GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx LIBGL_ALWAYS_SOFTWARE=1 kitty
@@ -35,7 +35,7 @@ bindsym $mod+Ctrl+Shift+l move right
 
 # 레이아웃
 bindsym $mod+Ctrl+s layout stacking
-bindsym $mod+Ctrl+w exec env GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx VK_ICD_FILENAMES=/data/data/com.termux/files/usr/share/vulkan/icd.d/freedreno_icd.aarch64.json wezterm start --always-new-process
+bindsym $mod+Ctrl+w exec env GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx wezterm-launch start --always-new-process
 bindsym $mod+Ctrl+e layout toggle split
 bindsym $mod+Ctrl+f fullscreen toggle
 

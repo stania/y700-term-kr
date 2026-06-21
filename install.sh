@@ -66,7 +66,8 @@ if [ "$IS_TERMUX" -eq 1 ]; then
   link "$REPO_DIR/dotfiles/.Xresources"  "$HOME/.Xresources"
 
   mkdir -p "$HOME/.config/wezterm"
-  link "$REPO_DIR/dotfiles/.config/wezterm/wezterm.lua" "$HOME/.config/wezterm/wezterm.lua"
+  link "$REPO_DIR/dotfiles/.config/wezterm/wezterm.lua"          "$HOME/.config/wezterm/wezterm.lua"
+  link "$REPO_DIR/dotfiles/.config/wezterm/wezterm-software.lua" "$HOME/.config/wezterm/wezterm-software.lua"
 
   mkdir -p "$HOME/.config/i3"
   link "$REPO_DIR/dotfiles/.config/i3/config"          "$HOME/.config/i3/config"
@@ -93,8 +94,9 @@ link "$REPO_DIR/dotfiles/.zshrc"     "$HOME/.zshrc"
 link "$REPO_DIR/dotfiles/.tmux.conf" "$HOME/.tmux.conf"
 
 mkdir -p "$HOME/.local/bin"
-ln -sf "$REPO_DIR/bin/tmux-clipboard" "$HOME/.local/bin/tmux-clipboard"
-ln -sf "$REPO_DIR/bin/xdg-open"       "$HOME/.local/bin/xdg-open"
+ln -sf "$REPO_DIR/bin/tmux-clipboard"  "$HOME/.local/bin/tmux-clipboard"
+ln -sf "$REPO_DIR/bin/xdg-open"        "$HOME/.local/bin/xdg-open"
+ln -sf "$REPO_DIR/bin/wezterm-launch"  "$HOME/.local/bin/wezterm-launch"
 
 # =============================================================================
 # proot / 그 외 환경 전용 도구

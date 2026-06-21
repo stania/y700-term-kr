@@ -1,0 +1,10 @@
+#!/bin/sh
+# GPU 감지: /dev/kgsl-3d0 존재 = Adreno (turnip WebGPU)
+#           없으면 Mali 등 → Software 렌더러
+if [ -e /dev/kgsl-3d0 ]; then
+  exec env \
+    VK_ICD_FILENAMES=/data/data/com.termux/files/usr/share/vulkan/icd.d/freedreno_icd.aarch64.json \
+    wezterm --config-file "$HOME/.config/wezterm/wezterm.lua" "$@"
+else
+  exec wezterm --config-file "$HOME/.config/wezterm/wezterm-software.lua" "$@"
+fi
