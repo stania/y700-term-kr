@@ -2,6 +2,8 @@
 
 Lenovo Legion Y700 2023 태블릿에서 Termux + X11 기반의 리눅스 데스크탑 환경을 구성한 설정 모음입니다.
 
+![스크린샷](assets/screenshot.png)
+
 ## 하드웨어
 
 | 항목 | 사양 |
