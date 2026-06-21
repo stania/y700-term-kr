@@ -58,7 +58,8 @@ if [ "$IS_TERMUX" -eq 1 ]; then
     zsh \
     oh-my-posh \
     fzf \
-    fd
+    fd \
+    vulkan-tools
 
   log "dotfile symlink (Termux)"
   link "$REPO_DIR/start-x11.sh"          "$HOME/start-x11.sh"

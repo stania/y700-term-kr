@@ -37,9 +37,9 @@ git clone https://github.com/stania/y700-term-kr ~/y700-term-kr
 `install.sh`가 X11 환경에 필요한 모든 패키지를 설치합니다:
 termux-x11-nightly, i3, wezterm, rofi, dunst, fcitx5, mesa, mesa-vulkan-icd-freedreno,
 fontconfig, xrdb, xrandr, xclip, dmenu, openssh, noto-fonts-cjk, jq, termux-api,
-zsh, oh-my-posh, fzf, fd
+zsh, oh-my-posh, fzf, fd, vulkan-tools
 
-turnip ICD가 정상 로드됐는지 확인:
+설치 후 turnip ICD가 정상 로드됐는지 확인:
 
 ```bash
 vulkaninfo --summary 2>/dev/null | grep -E 'GPU|deviceType'
