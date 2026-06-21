@@ -12,10 +12,12 @@ cd ~/y700-term-kr
 
 | 환경 | 적용 내용 |
 |------|-----------|
-| Termux 네이티브 | `.zshrc` `.tmux.conf` `.Xresources` symlink, `start-x11.sh` symlink, `.config/wezterm` `.config/i3` `.config/rofi` `.config/fcitx5` `.config/fontconfig` symlink, oh-my-posh(pkg), fzf(pkg), fd(pkg), tpm, zsh 기본 셸 설정 |
-| proot Ubuntu | `.zshrc` `.tmux.conf` symlink, oh-my-posh(aarch64 바이너리 → `~/.local/bin`), fzf(apt), fd(apt), tpm, zsh 기본 셸 권장 |
+| Termux 네이티브 | 필요한 모든 패키지 `pkg install`, dotfile symlink, tpm, zsh + chsh |
+| proot Ubuntu | dotfile symlink, oh-my-posh(aarch64 바이너리), fzf/fd/zsh(apt), tpm, chsh |
 
 멱등(idempotent) — 여러 번 실행해도 동일한 결과. 기존 실파일은 `.bak.YYYYMMDDHHMMSS`로 백업합니다.
+
+Termux에서는 `pkg install git` 한 번만 수동으로 실행한 뒤 `./install.sh`가 나머지를 전부 처리합니다.
 
 ---
 
@@ -24,24 +26,18 @@ cd ~/y700-term-kr
 1. [Termux](https://play.google.com/store/apps/details?id=com.termux) 설치 (Play Store)
 2. [Termux:X11](https://github.com/termux/termux-x11/releases/tag/nightly) 설치 (GitHub nightly APK — Play Store 미지원)
 
-## 1단계: Termux 기본 패키지
+## 1단계: 설정 파일 배포 (Termux)
 
 ```bash
-pkg update && pkg upgrade
-pkg install x11-repo
-pkg install \
-  termux-x11-nightly \
-  i3 i3status \
-  wezterm \
-  rofi dunst \
-  ranger feh mupdf-tools \
-  fcitx5 \
-  mesa mesa-vulkan-icd-freedreno \
-  fontconfig \
-  xrdb xrandr xclip \
-  dmenu \
-  git openssh
+pkg install git
+git clone https://github.com/stania/y700-term-kr ~/y700-term-kr
+~/y700-term-kr/install.sh
 ```
+
+`install.sh`가 X11 환경에 필요한 모든 패키지를 설치합니다:
+termux-x11-nightly, i3, wezterm, rofi, dunst, fcitx5, mesa, mesa-vulkan-icd-freedreno,
+fontconfig, xrdb, xrandr, xclip, dmenu, openssh, noto-fonts-cjk, jq, termux-api,
+zsh, oh-my-posh, fzf, fd
 
 turnip ICD가 정상 로드됐는지 확인:
 
@@ -50,46 +46,22 @@ vulkaninfo --summary 2>/dev/null | grep -E 'GPU|deviceType'
 # 결과: Turnip Adreno (TM) 730 / PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU
 ```
 
-## 2단계: 폰트 설치
+## 2단계: 폰트 설치 (PlemolKRConsole)
 
-```bash
-pkg install noto-fonts-cjk
-```
-
-**PlemolKRConsole Nerd Font Mono** 는 수동 설치가 필요합니다.
+`noto-fonts-cjk`는 `install.sh`가 자동 설치합니다. **PlemolKRConsole Nerd Font Mono**만 수동으로 설치합니다.
 
 - 저장소: [soomtong/PlemolKR](https://github.com/soomtong/PlemolKR/releases) — PlemolJP 기반 한국어 특화 포크
-- 다운로드: `PlemolKRConsole.zip` (Nerd Font 패치 포함)
 
 ```bash
-# PlemolKRConsole NF 설치 (proot Ubuntu 기준)
 mkdir -p ~/.local/share/fonts/PlemolKR
-cd /tmp
 curl -fLO https://github.com/soomtong/PlemolKR/releases/latest/download/PlemolKRConsole.zip
 unzip PlemolKRConsole.zip -d ~/.local/share/fonts/PlemolKR/
 fc-cache -fv
 ```
 
-> `PlemolKR35Console.zip`은 한글 3:영문 5 비율 변형입니다. 반각 기준 폰트폴백 구성에는 기본 `PlemolKRConsole.zip`을 사용합니다.
+> `PlemolKR35Console.zip`은 한글 3:영문 5 비율 변형입니다.
 
-## 3단계: 설정 파일 배포
-
-```bash
-git clone https://github.com/stania/y700-term-kr ~/y700-term-kr
-cd ~/y700-term-kr
-./install.sh
-```
-
-`install.sh`가 설치하는 외부 도구:
-
-| 도구 | 링크 | 용도 |
-|------|------|------|
-| oh-my-posh | [JanDeDobbeleer/oh-my-posh](https://github.com/JanDeDobbeleer/oh-my-posh) | 셸 프롬프트 |
-| fzf | [junegunn/fzf](https://github.com/junegunn/fzf) | 퍼지 파인더 |
-| fd | [sharkdp/fd](https://github.com/sharkdp/fd) | fzf 탐색 소스 |
-| tpm | [tmux-plugins/tpm](https://github.com/tmux-plugins/tpm) | tmux 플러그인 매니저 |
-
-## 4단계: proot Ubuntu
+## 3단계: proot Ubuntu
 
 ```bash
 pkg install proot-distro
@@ -104,7 +76,7 @@ cd ~/y700-term-kr && ./install.sh
 
 proot/glibc 환경에서는 `install.sh`가 oh-my-posh aarch64 릴리스를 `~/.local/bin`에 내려받습니다.
 
-## 5단계: X11 시작
+## 4단계: X11 시작
 
 ```bash
 ~/start-x11.sh
@@ -112,7 +84,7 @@ proot/glibc 환경에서는 `install.sh`가 oh-my-posh aarch64 릴리스를 `~/.
 
 Termux:X11 앱이 자동으로 포그라운드로 전환되고 i3가 실행됩니다.
 
-## 6단계: Claude Code (proot 전용)
+## 5단계: Claude Code (proot 전용)
 
 Claude Code는 glibc 환경이 필요하므로 **proot Ubuntu 안에서만** 설치·실행합니다.
 Termux 네이티브(Android Bionic)에서는 네이티브 바이너리 모듈이 동작하지 않습니다.
