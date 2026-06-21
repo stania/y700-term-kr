@@ -110,21 +110,31 @@ else
   git clone --depth 1 https://github.com/tmux-plugins/tpm "$TPM_DIR"
 fi
 
-# --- 기본 셸을 zsh 로 (멱등) ---
+# --- zsh 설치 + 기본 셸 변경 (멱등) ---
 if command -v zsh >/dev/null 2>&1; then
-  case "${SHELL:-}" in
-    *zsh) log "기본 셸 이미 zsh" ;;
-    *)
-      if [ "$IS_TERMUX" -eq 1 ]; then
-        log "기본 셸을 zsh 로 변경 (chsh)"
-        chsh -s zsh || warn "chsh 실패 — 수동으로 'chsh -s zsh'"
-      else
-        warn "기본 셸이 zsh 가 아닙니다. 'chsh -s $(command -v zsh)' 권장"
-      fi
-      ;;
-  esac
+  log "zsh 이미 설치됨"
+elif [ "$IS_TERMUX" -eq 1 ]; then
+  log "zsh 설치 (pkg)"
+  pkg install -y zsh
 else
-  warn "zsh 가 없습니다 (Termux: 'pkg install zsh')"
+  log "zsh 설치 (apt)"
+  apt-get install -y zsh
 fi
+
+case "${SHELL:-}" in
+  *zsh) log "기본 셸 이미 zsh" ;;
+  *)
+    ZSH_PATH="$(command -v zsh 2>/dev/null)"
+    if [ -z "$ZSH_PATH" ]; then
+      warn "zsh 설치 실패 — chsh 건너뜀"
+    elif [ "$IS_TERMUX" -eq 1 ]; then
+      log "기본 셸을 zsh 로 변경 (chsh)"
+      chsh -s zsh || warn "chsh 실패 — 수동으로 'chsh -s zsh'"
+    else
+      log "기본 셸을 zsh 로 변경 (chsh)"
+      chsh -s "$ZSH_PATH" || warn "chsh 실패 — 수동으로 'chsh -s $ZSH_PATH'"
+    fi
+    ;;
+esac
 
 log "완료. 셸을 재시작하거나: exec zsh"
