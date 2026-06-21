@@ -1,0 +1,124 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 2,
+  "final_space": false,
+  "console_title_template": "{{ .Shell }} - {{ .Folder }}",
+  "transient_prompt": {
+    "background": "transparent",
+    "foreground": "lightGreen",
+    "template": "❯ "
+  },
+  "tooltips": [
+    {
+      "type": "kubectl",
+      "tips": ["kubectl", "k", "helm", "kubens", "kubectx"],
+      "style": "plain",
+      "foreground": "cyan",
+      "template": "⎈ {{ if contains \"arn:aws:eks:\" .Context }}{{ index (splitList \"/\" .Context) 1 }}{{ else }}{{ .Context }}{{ end }}{{ if .Namespace }}/{{ .Namespace }}{{ end }} ",
+      "properties": {
+        "display_error": false
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "alignment": "left",
+      "type": "prompt",
+      "segments": [
+        {
+          "type": "shell",
+          "style": "plain",
+          "foreground": "cyan",
+          "template": "{{ substr 0 1 .Name }} "
+        },
+        {
+          "type": "text",
+          "style": "plain",
+          "foreground": "cyan",
+          "template": "{{ if .Env.OMP_HOST_ICON }}{{ .Env.OMP_HOST_ICON }} {{ end }}"
+        },
+        {
+          "foreground": "#808080",
+          "style": "plain",
+          "template": "{{ if .WSL }}WSL at {{ end }}{{.Icon}}",
+          "type": "os"
+        },
+        {
+          "foreground": "cyan",
+          "properties": {
+            "style": "full"
+          },
+          "style": "plain",
+          "template": " {{ .Path }} ",
+          "type": "path"
+        },
+        {
+          "foreground": "#F1502F",
+          "cache": {
+            "duration": "10s",
+            "strategy": "folder"
+          },
+          "properties": {
+            "fetch_status": true
+          },
+          "style": "plain",
+          "template": ":: {{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }} ",
+          "type": "git"
+        }
+      ]
+    },
+    {
+      "alignment": "right",
+      "type": "prompt",
+      "segments": [
+        {
+          "foreground": "red",
+          "style": "plain",
+          "template": "| root ",
+          "type": "root"
+        },
+        {
+          "foreground": "#06A4CE",
+          "style": "plain",
+          "template": "|  {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+          "type": "dart"
+        },
+        {
+          "foreground": "#6CA35E",
+          "style": "plain",
+          "template": "|  {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{ .Full }} ",
+          "type": "node"
+        },
+        {
+          "foreground": "#4584b6",
+          "properties": {
+            "display_mode": "context",
+            "fetch_virtual_env": true
+          },
+          "style": "plain",
+          "template": "|  {{ .Venv }} ",
+          "type": "python"
+        }
+      ]
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "type": "prompt",
+      "segments": [
+        {
+          "foreground": "lightGreen",
+          "foreground_templates": [
+            "{{ if gt .Code 0 }}red{{ end }}"
+          ],
+          "properties": {
+            "always_enabled": true
+          },
+          "style": "plain",
+          "template": "❯ ",
+          "type": "status"
+        }
+      ]
+    }
+  ]
+}
