@@ -67,10 +67,12 @@ Claude Code는 proot Ubuntu 안에서만 실행됩니다. Termux 자체(`pkg`, `
 
 설정 방법은 [INSTALL.md](INSTALL.md) 참고.
 
-### 두 손가락 스크롤
+### Termux:X11 앱 설정
 
-Termux:X11 기본 포인터 모드에서는 두 손가락 스크롤이 동작하지 않습니다.
-Termux:X11 설정 → **Pointer** → **Simulated touchscreen** 모드로 전환하면 활성화됩니다.
+| 설정 | 값 | 이유 |
+|------|----|------|
+| Pointer → Pointer mode | Simulated touchscreen | 두 손가락 스크롤 활성화 |
+| Enable char based input | ON | fcitx5 한국어 입력 정상 동작 |
 
 ### URL 클릭 → Android 브라우저
 
