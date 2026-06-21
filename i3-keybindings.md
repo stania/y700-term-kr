@@ -8,9 +8,10 @@
 |--------|------|
 | Alt+Ctrl+W | wezterm 새 창 |
 | Alt+Ctrl+I | kitty 새 창 |
-| Alt+Ctrl+D | rofi 앱 런처 |
-| Alt+Ctrl+R | rofi 앱 런처 (대체) |
-| Win+R | rofi 앱 런처 (대체) |
+| Alt+Ctrl+D | dmenu 앱 런처 |
+| Alt+Ctrl+R | rofi 앱 런처 (combi) |
+| Alt+Ctrl+T | rofi SSH 호스트 선택 |
+| Win+R | rofi 앱 런처 (drun) |
 
 ## 창 관리
 

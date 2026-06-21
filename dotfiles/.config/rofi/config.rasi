@@ -1,0 +1,14 @@
+configuration {
+  show-icons:        false;
+  terminal:          "wezterm";
+  parse-known-hosts: false;
+  parse-hosts:       false;
+  modes:             "window,drun,run,combi,script:~/.config/rofi/ssh-hosts.sh";
+  combi-modes:       "window,run";
+}
+
+@theme "Arc-Dark"
+
+* {
+  font: "PlemolKRConsole Nerd Font Mono 21";
+}

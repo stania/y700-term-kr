@@ -1,0 +1,55 @@
+# i3 config
+set $mod Mod1
+
+font pango:PlemolKRConsole Nerd Font Mono 11
+
+# 창 → 워크스페이스 자동 배정
+assign [class="org.wezfurlong.wezterm"] 1
+
+# 시작 시 앱 실행
+exec --no-startup-id setxkbmap -option ctrl:nocaps
+exec --no-startup-id env DISPLAY=:0 ~/.config/i3/xclip-sync.sh
+exec --no-startup-id env GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx VK_ICD_FILENAMES=/data/data/com.termux/files/usr/share/vulkan/icd.d/freedreno_icd.aarch64.json wezterm start --always-new-process
+
+# 단축키 (Alt+Ctrl+키)
+bindsym $mod+Ctrl+i exec env GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx LIBGL_ALWAYS_SOFTWARE=1 kitty
+
+bindsym $mod+Ctrl+d exec dmenu_run -fn "PlemolKRConsole Nerd Font Mono:pixelsize=32" -nb "#1a1b26" -nf "#c0caf5" -sb "#7aa2f7" -sf "#1a1b26"
+bindsym Mod4+r exec rofi -show drun
+bindsym $mod+Ctrl+r exec rofi -show combi
+bindsym $mod+Ctrl+t exec rofi -show "script:~/.config/rofi/ssh-hosts.sh"
+bindsym $mod+Ctrl+Shift+q kill
+bindsym $mod+Ctrl+Shift+e exec i3-msg exit
+
+# 포커스 이동
+bindsym $mod+Ctrl+h focus left
+bindsym $mod+Ctrl+j focus down
+bindsym $mod+Ctrl+k focus up
+bindsym $mod+Ctrl+l focus right
+
+# 창 이동
+bindsym $mod+Ctrl+Shift+h move left
+bindsym $mod+Ctrl+Shift+j move down
+bindsym $mod+Ctrl+Shift+k move up
+bindsym $mod+Ctrl+Shift+l move right
+
+# 레이아웃
+bindsym $mod+Ctrl+s layout stacking
+bindsym $mod+Ctrl+w exec env GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx VK_ICD_FILENAMES=/data/data/com.termux/files/usr/share/vulkan/icd.d/freedreno_icd.aarch64.json wezterm start --always-new-process
+bindsym $mod+Ctrl+e layout toggle split
+bindsym $mod+Ctrl+f fullscreen toggle
+
+# 워크스페이스
+bindsym $mod+Ctrl+1 workspace 1
+bindsym $mod+Ctrl+2 workspace 2
+bindsym $mod+Ctrl+3 workspace 3
+bindsym $mod+Ctrl+Shift+1 move container to workspace 1
+bindsym $mod+Ctrl+Shift+2 move container to workspace 2
+bindsym $mod+Ctrl+Shift+3 move container to workspace 3
+
+floating_modifier $mod
+
+bar {
+  status_command ~/.config/i3/status.sh
+  position top
+}

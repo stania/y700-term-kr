@@ -93,3 +93,20 @@ Termux:X11 설정 → **Pointer** → **Simulated touchscreen** 모드로 전환
 
 proot 안 WezTerm에서 URL을 Ctrl+Click 하면 `xdg-open`을 통해 Android 기본 브라우저가 열립니다.
 (`install.sh` 적용 시 `~/.local/bin/xdg-open` 자동 설치)
+
+### Shift+Enter (WezTerm)
+
+Claude Code 등 일부 TUI 앱은 Enter와 Shift+Enter를 구분합니다(Shift+Enter = 줄바꿈, Enter = 전송).
+WezTerm은 기본적으로 둘을 동일한 `\r`로 전송하므로, `wezterm.lua`에서 kitty keyboard protocol 시퀀스를 명시적으로 매핑합니다.
+
+```lua
+config.keys = {
+  {
+    key = "Return",
+    mods = "SHIFT",
+    action = wezterm.action.SendString("\x1b[13;2u"),
+  },
+}
+```
+
+i3wm에서는 Shift+Return이 기본적으로 **새 터미널 열기** 단축키(`bindsym $mod+Shift+Return exec wezterm`)로 쓰이므로 WezTerm 내부 키바인딩이 i3에 가로채이지 않도록 WezTerm 창에 포커스가 있을 때만 동작합니다. WezTerm이 포커스를 갖고 있으면 키 이벤트를 먼저 처리하므로 i3로 전달되지 않습니다.

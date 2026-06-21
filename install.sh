@@ -39,6 +39,32 @@ mkdir -p "$HOME/.local/bin"
 ln -sf "$REPO_DIR/bin/tmux-clipboard" "$HOME/.local/bin/tmux-clipboard"
 ln -sf "$REPO_DIR/bin/xdg-open"      "$HOME/.local/bin/xdg-open"
 
+# --- Termux native 전용 ---
+if [ "$IS_TERMUX" -eq 1 ]; then
+  link "$REPO_DIR/start-x11.sh" "$HOME/start-x11.sh"
+
+  link "$REPO_DIR/dotfiles/.Xresources" "$HOME/.Xresources"
+
+  mkdir -p "$HOME/.config/wezterm"
+  link "$REPO_DIR/dotfiles/.config/wezterm/wezterm.lua" "$HOME/.config/wezterm/wezterm.lua"
+
+  mkdir -p "$HOME/.config/i3"
+  link "$REPO_DIR/dotfiles/.config/i3/config"       "$HOME/.config/i3/config"
+  link "$REPO_DIR/dotfiles/.config/i3/status.sh"    "$HOME/.config/i3/status.sh"
+  link "$REPO_DIR/dotfiles/.config/i3/xclip-sync.sh" "$HOME/.config/i3/xclip-sync.sh"
+
+  mkdir -p "$HOME/.config/rofi"
+  link "$REPO_DIR/dotfiles/.config/rofi/config.rasi"   "$HOME/.config/rofi/config.rasi"
+  link "$REPO_DIR/dotfiles/.config/rofi/ssh-hosts.sh"  "$HOME/.config/rofi/ssh-hosts.sh"
+
+  mkdir -p "$HOME/.config/fontconfig/conf.d"
+  link "$REPO_DIR/dotfiles/.config/fontconfig/conf.d/60-fallback-symbols.conf" \
+       "$HOME/.config/fontconfig/conf.d/60-fallback-symbols.conf"
+
+  mkdir -p "$HOME/.config/fcitx5"
+  link "$REPO_DIR/dotfiles/.config/fcitx5/profile" "$HOME/.config/fcitx5/profile"
+fi
+
 # --- oh-my-posh (반드시 PIE: Termux 네이티브 linker는 non-PIE(EXEC) 거부) ---
 if command -v oh-my-posh >/dev/null 2>&1; then
   log "oh-my-posh 이미 설치됨 ($(command -v oh-my-posh))"
